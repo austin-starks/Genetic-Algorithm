@@ -2,7 +2,7 @@ from population import Population
 
 
 def main():
-    pop_size = 1000
+    pop_size = 200
     target = "To be or not to be."
     mutation_rate = 0.01
 

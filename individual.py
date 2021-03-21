@@ -69,8 +69,29 @@ class Individual:
 
         random_number = random.random()
         if mutation_rate > random_number:
+            mutation_type = random.randint(0, 10)
             random_index = random.randrange(len(self.genes))
-            new_char = random.choice(string.printable)
-            self.genes[random_index] = new_char
+            if mutation_type <= 6:
+                # major point mutation
+                new_char = random.choice(string.printable)
+                self.genes[random_index] = new_char
+            elif mutation_type <= 8:
+                # frameshift mutation left hand side
+                mutated_gene = self.genes[0:random_index]
+                for i in range(random_index, len(self.genes)):
+                    mutated_gene.append(random.choice(string.printable))
+                self.genes = mutated_gene
+            else:
+                # frameshift mutation right hand side
+                mutated_gene = []
+                for i in range(0, random_index):
+                    mutated_gene.append(random.choice(string.printable))
+                mutated_gene += self.genes[random_index:]
+                self.genes = mutated_gene
+ 
+
+
+
+
 
 
