@@ -1,21 +1,39 @@
 from population import Population
+import time
 
-
-def main():
-    pop_size = 200
+def evaluate_settings(pop_size, mutation_rate):
     target = "To be or not to be."
-    mutation_rate = 0.01
-
     pop = Population(target, pop_size, mutation_rate)
 
     # you don't need to call this function when the ones right bellow are fully implemented
     pop.print_population_status()
+    start_time = time.time()
+    i = 0
     while not pop.finished:
         pop.natural_selection()
         pop.generate_new_population()
         pop.evaluate()
-        pop.print_population_status()
+        if i % 10 == 0:
+            pop.print_population_status()
+        i += 1
+    return [pop.generations, time.time() - start_time]
 
+def main():
+    print("===========================================")
+    setting_generations = []
+    setting_time = []
+    print("Setting: ", 200, 0.01)
+    for i in range(0, 20):
+        generations, time_elapsed = evaluate_settings(200, 0.02)
+        setting_generations.append(generations)
+        setting_time.append(time_elapsed)
+    print("Average generations: ",sum(setting_generations)/ len(setting_generations))
+    print("Total time: ",sum(setting_time))  
+    print("===========================================")
+    
 
 if __name__ == "__main__":
     main()
+
+    
+    

@@ -71,21 +71,27 @@ class Individual:
         if mutation_rate > random_number:
             mutation_type = random.randint(0, 10)
             random_index = random.randrange(len(self.genes))
-            if mutation_type <= 6:
-                # major point mutation
+            if mutation_type <= 4:
+                # minor point mutation - change one random nucleotide to a nearby nucleotide
+                encoded_letter = chr(self.encode(self.genes[random_index])[0] + random.randint(-5, 5))
+                self.genes[random_index] = encoded_letter
+            elif mutation_type <= 6:
+                # major point mutation - change one random nucleotide to a random nucleotide
                 new_char = random.choice(string.printable)
                 self.genes[random_index] = new_char
             elif mutation_type <= 8:
-                # frameshift mutation left hand side
+                # frameshift mutation right hand side
+                # left halve of gene is untouched; right half of gene is severely affected
                 mutated_gene = self.genes[0:random_index]
                 for i in range(random_index, len(self.genes)):
-                    mutated_gene.append(random.choice(string.printable))
+                    mutated_gene.append(chr(self.encode(self.genes[i])[0] + random.randint(-5, 5)))
                 self.genes = mutated_gene
             else:
-                # frameshift mutation right hand side
+                # frameshift mutation left hand side
+                # right half of gene is untouched, left half of gene is severely affected
                 mutated_gene = []
                 for i in range(0, random_index):
-                    mutated_gene.append(random.choice(string.printable))
+                    mutated_gene.append(chr(self.encode(self.genes[i])[0] + random.randint(-5, 5)))
                 mutated_gene += self.genes[random_index:]
                 self.genes = mutated_gene
  
