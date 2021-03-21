@@ -17,7 +17,7 @@ class Population:
         self.best_ind = None
         self.finished = False
         self.perfect_score = 1.0
-        self.best_fitness = 0.0
+        self.max_fitness = 0.0
         self.average_fitness = 0.0
         self.mating_pool = []
 
@@ -25,8 +25,8 @@ class Population:
             ind = Individual(len(target))
             ind.calc_fitness(target)
 
-            if ind.fitness > self.best_fitness:
-                self.best_fitness = ind.fitness
+            if ind.fitness > self.max_fitness:
+                self.max_fitness = ind.fitness
                 self.best_ind = ind
 
             self.average_fitness += ind.fitness
@@ -80,10 +80,10 @@ class Population:
         average_fitness = 0
         for ind in self.population:
             average_fitness += ind.fitness
-            if ind.fitness > self.best_fitness:
+            if ind.fitness > self.max_fitness:
                 self.best_ind = ind
-                self.best_fitness = ind.fitness
+                self.max_fitness = ind.fitness
         self.average_fitness = average_fitness / len(self.population)
-        if self.best_fitness == 1:
+        if self.max_fitness == 1:
             self.finished = True
 
