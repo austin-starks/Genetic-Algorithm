@@ -22,7 +22,7 @@ def main():
     print("===========================================")
     setting_generations = []
     setting_time = []
-    total_generations = 200
+    total_generations = 100
     mutation_rate = 0.01
     print("Setting: ", total_generations, mutation_rate)
     for i in range(0, 20):
