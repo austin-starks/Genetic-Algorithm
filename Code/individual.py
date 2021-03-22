@@ -26,7 +26,7 @@ class Individual:
         encoded_target = self.encode(target)
         encoded_genes = self.encode(self.genes)
         for t, g in zip(encoded_target, encoded_genes):
-            score += int(((t-g)**2)**0.5)
+            score += int(abs(t-g))
         # insert your code to calculate the individual fitness here
         self.fitness = 1/(1+(score * 0.05))
         
@@ -73,15 +73,25 @@ class Individual:
             random_index = random.randrange(len(self.genes))
             if mutation_type <= 4:
                 # minor point mutation - change one random nucleotide to a nearby nucleotide
-                encoded_letter = chr(self.encode(self.genes[random_index])[0] + random.randint(-5, 5))
-                self.genes[random_index] = encoded_letter
+                char = self.encode(self.genes[random_index])[0] + random.randint(-5, 5)
+                char = min(110000, char)
+                char = max(0, char)
+                self.genes[random_index] = chr(char)
             elif mutation_type <= 6:
                 # major point mutation - change one random nucleotide to a random nucleotide
                 new_char = random.choice(string.printable)
                 self.genes[random_index] = new_char
-            elif mutation_type <= 8:
+            elif mutation_type <= 7:
                 # frameshift mutation right hand side
                 # left halve of gene is untouched; right half of gene is severely affected
+                mutated_gene = []
+                for i in range(0, random_index):
+                    mutated_gene.append(random.choice(string.printable))
+                mutated_gene += self.genes[random_index:]
+                self.genes = mutated_gene
+            elif mutation_type <= 8:
+                # frameshift mutation right hand side
+                # left halve of gene is untouched; right half of gene is minorly affected
                 mutated_gene = self.genes[0:random_index]
                 for i in range(random_index, len(self.genes)):
                     char = self.encode(self.genes[i])[0] + random.randint(-5, 5)
@@ -89,9 +99,16 @@ class Individual:
                     char = max(0, char)
                     mutated_gene.append(chr(char))
                 self.genes = mutated_gene
+            elif mutation_type <= 9:
+                # frameshift mutation right hand side
+                # left halve of gene is untouched; right half of gene is severely affected
+                mutated_gene = self.genes[0:random_index]
+                for i in range(random_index, len(self.genes)):
+                    mutated_gene.append(random.choice(string.printable))
+                self.genes = mutated_gene
             else:
                 # frameshift mutation left hand side
-                # right half of gene is untouched, left half of gene is severely affected
+                # right half of gene is untouched, left half of gene is minorly affected
                 mutated_gene = []
                 for i in range(0, random_index):
                     char = self.encode(self.genes[i])[0] + random.randint(-5, 5)

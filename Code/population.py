@@ -60,6 +60,10 @@ class Population:
     def generate_parents(self):
         dad = self.best_ind if random.randint(0,10) <= 8 else random.choice(self.mating_pool)
         mom = random.choice(self.mating_pool)
+        i = 0
+        while dad.genes == mom.genes and i > 10:
+            mom = random.choice(self.mating_pool)
+            i += 1
         return [dad, mom]
         
 

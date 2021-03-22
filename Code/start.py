@@ -22,14 +22,15 @@ def main():
     print("===========================================")
     setting_generations = []
     setting_time = []
-    population_size = 200
-    mutation_rate = 0.05
-    print("Setting: ", population_size, mutation_rate)
+    population_size = 1000
+    mutation_rate = 0.02
+    print("Setting: ", "population_size", population_size, "mutation_rate", mutation_rate)
     for i in range(0, 20):
+        print("Simulation: ", i)
         generations, time_elapsed = evaluate_settings(population_size, mutation_rate)
         setting_generations.append(generations)
         setting_time.append(time_elapsed)
-    print("\nSetting: ", population_size, mutation_rate)
+    print("Setting: ", "population_size", population_size, "mutation_rate", mutation_rate)
     print("Average generations: ",sum(setting_generations)/ len(setting_generations))
     print("Total time: ",sum(setting_time))  
     print("===========================================")
