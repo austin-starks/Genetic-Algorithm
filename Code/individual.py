@@ -84,14 +84,20 @@ class Individual:
                 # left halve of gene is untouched; right half of gene is severely affected
                 mutated_gene = self.genes[0:random_index]
                 for i in range(random_index, len(self.genes)):
-                    mutated_gene.append(chr(self.encode(self.genes[i])[0] + random.randint(-5, 5)))
+                    char = self.encode(self.genes[i])[0] + random.randint(-5, 5)
+                    char = min(110000, char)
+                    char = max(0, char)
+                    mutated_gene.append(chr(char))
                 self.genes = mutated_gene
             else:
                 # frameshift mutation left hand side
                 # right half of gene is untouched, left half of gene is severely affected
                 mutated_gene = []
                 for i in range(0, random_index):
-                    mutated_gene.append(chr(self.encode(self.genes[i])[0] + random.randint(-5, 5)))
+                    char = self.encode(self.genes[i])[0] + random.randint(-5, 5)
+                    char = min(110000, char)
+                    char = max(0, char)
+                    mutated_gene.append(chr(char))
                 mutated_gene += self.genes[random_index:]
                 self.genes = mutated_gene
  
