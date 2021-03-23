@@ -58,66 +58,77 @@ class Individual:
         child.genes = gene
 
         return child
-
+        
     # Mutation: based on a mutation probability, the function picks a new random character and replace a gene with it
-    def mutate(self, mutation_rate):
+    def mutate(self, mutation_rate, standard_mutation):
         # random number is betwen 0 and 1
         # mutation rate is a number between 0 and 1
         # if mutation rate is 0, never mutate
         # if mutation rate is 1, always mutate
         # if mutation rate is greater than random number, mutate
-
         random_number = random.random()
         if mutation_rate > random_number:
-            mutation_type = random.randint(0, 10)
-            random_index = random.randrange(len(self.genes))
-            if mutation_type <= 4:
-                # minor point mutation - change one random nucleotide to a nearby nucleotide
-                char = self.encode(self.genes[random_index])[0] + random.randint(-5, 5)
+            if standard_mutation:
+                self.mutate_standard()
+            else:
+                self.mutate_modified()
+
+    def mutate_standard(self):
+        random_index = random.randrange(len(self.genes))
+        new_char = random.choice(string.printable)
+        self.genes[random_index] = new_char
+
+    # Mutation: based on a mutation probability, the function picks a new random character and replace a gene with it
+    def mutate_modified(self):
+        mutation_type = random.randint(0, 10)
+        random_index = random.randrange(len(self.genes))
+        if mutation_type <= 4:
+            # minor point mutation - change one random nucleotide to a nearby nucleotide
+            char = self.encode(self.genes[random_index])[0] + random.randint(-5, 5)
+            char = min(110000, char)
+            char = max(0, char)
+            self.genes[random_index] = chr(char)
+        elif mutation_type <= 6:
+            # major point mutation - change one random nucleotide to a random nucleotide
+            new_char = random.choice(string.printable)
+            self.genes[random_index] = new_char
+        elif mutation_type <= 7:
+            # frameshift mutation right hand side
+            # left halve of gene is untouched; right half of gene is severely affected
+            mutated_gene = []
+            for i in range(0, random_index):
+                mutated_gene.append(random.choice(string.printable))
+            mutated_gene += self.genes[random_index:]
+            self.genes = mutated_gene
+        elif mutation_type <= 8:
+            # frameshift mutation right hand side
+            # left halve of gene is untouched; right half of gene is minorly affected
+            mutated_gene = self.genes[0:random_index]
+            for i in range(random_index, len(self.genes)):
+                char = self.encode(self.genes[i])[0] + random.randint(-5, 5)
                 char = min(110000, char)
                 char = max(0, char)
-                self.genes[random_index] = chr(char)
-            elif mutation_type <= 6:
-                # major point mutation - change one random nucleotide to a random nucleotide
-                new_char = random.choice(string.printable)
-                self.genes[random_index] = new_char
-            elif mutation_type <= 7:
-                # frameshift mutation right hand side
-                # left halve of gene is untouched; right half of gene is severely affected
-                mutated_gene = []
-                for i in range(0, random_index):
-                    mutated_gene.append(random.choice(string.printable))
-                mutated_gene += self.genes[random_index:]
-                self.genes = mutated_gene
-            elif mutation_type <= 8:
-                # frameshift mutation right hand side
-                # left halve of gene is untouched; right half of gene is minorly affected
-                mutated_gene = self.genes[0:random_index]
-                for i in range(random_index, len(self.genes)):
-                    char = self.encode(self.genes[i])[0] + random.randint(-5, 5)
-                    char = min(110000, char)
-                    char = max(0, char)
-                    mutated_gene.append(chr(char))
-                self.genes = mutated_gene
-            elif mutation_type <= 9:
-                # frameshift mutation right hand side
-                # left halve of gene is untouched; right half of gene is severely affected
-                mutated_gene = self.genes[0:random_index]
-                for i in range(random_index, len(self.genes)):
-                    mutated_gene.append(random.choice(string.printable))
-                self.genes = mutated_gene
-            else:
-                # frameshift mutation left hand side
-                # right half of gene is untouched, left half of gene is minorly affected
-                mutated_gene = []
-                for i in range(0, random_index):
-                    char = self.encode(self.genes[i])[0] + random.randint(-5, 5)
-                    char = min(110000, char)
-                    char = max(0, char)
-                    mutated_gene.append(chr(char))
-                mutated_gene += self.genes[random_index:]
-                self.genes = mutated_gene
- 
+                mutated_gene.append(chr(char))
+            self.genes = mutated_gene
+        elif mutation_type <= 9:
+            # frameshift mutation right hand side
+            # left halve of gene is untouched; right half of gene is severely affected
+            mutated_gene = self.genes[0:random_index]
+            for i in range(random_index, len(self.genes)):
+                mutated_gene.append(random.choice(string.printable))
+            self.genes = mutated_gene
+        else:
+            # frameshift mutation left hand side
+            # right half of gene is untouched, left half of gene is minorly affected
+            mutated_gene = []
+            for i in range(0, random_index):
+                char = self.encode(self.genes[i])[0] + random.randint(-5, 5)
+                char = min(110000, char)
+                char = max(0, char)
+                mutated_gene.append(chr(char))
+            mutated_gene += self.genes[random_index:]
+            self.genes = mutated_gene
+
 
 
 

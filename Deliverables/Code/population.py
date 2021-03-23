@@ -9,7 +9,7 @@ class Population:
         A class that describes a population of virtual individuals
     """
 
-    def __init__(self, target, size, mutation_rate, standard_mutation = False):
+    def __init__(self, target, size, mutation_rate):
         self.population = []
         self.generations = 0
         self.target = target
@@ -21,13 +21,7 @@ class Population:
         self.average_fitness = 0.0
         self.mating_pool = []
 
-        # says whether we're using the 'standard' implementation of the mutate
-        # function or the custom implmentation.
-
-        # if self.standard_mutation = True, we use standard implementation
-        self.standard_mutation = standard_mutation 
-
-        for _ in range(size):
+        for i in range(size):
             ind = Individual(len(target))
             ind.calc_fitness(target)
 
@@ -76,10 +70,10 @@ class Population:
     # Generate the new population based on the natural selection function
     def generate_new_population(self):
         new_population = []
-        for _ in range(len(self.population)):
+        for i in range(len(self.population)):
             dad, mom = self.generate_parents()
             child = mom.crossover(dad)
-            child.mutate(self.mutation_rate, self.standard_mutation)
+            child.mutate(self.mutation_rate)
             child.calc_fitness(self.target)
             new_population.append(child)
         self.population = new_population

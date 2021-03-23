@@ -3,7 +3,7 @@ import time
 
 def evaluate_settings(pop_size, mutation_rate):
     target = "To be or not to be."
-    pop = Population(target, pop_size, mutation_rate, standard_mutation=False)
+    pop = Population(target, pop_size, mutation_rate)
 
     # you don't need to call this function when the ones right bellow are fully implemented
     pop.print_population_status()
@@ -22,8 +22,8 @@ def main():
     print("===========================================")
     setting_generations = []
     setting_time = []
-    population_size = 200
-    mutation_rate = 0.01
+    population_size = 1000
+    mutation_rate = 0.02
     print("Setting: ", "population_size", population_size, "mutation_rate", mutation_rate)
     for i in range(0, 20):
         print("Simulation: ", i)
